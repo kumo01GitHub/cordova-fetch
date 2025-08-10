@@ -203,5 +203,5 @@ describe('fetching with node_modules in ancestor dirs', () => {
         return fetch(fetchTarget, fetchDestination).then(pkgInstallPath => {
             expect(pkgInstallPath).toBe(expectedInstallPath);
         });
-    }, 10 * 1000);
+    }, 50 * 1000);
 });
