@@ -19,6 +19,7 @@ const fetch = require('..');
 const uninstall = fetch.uninstall;
 
 const path = require('node:path');
+const url = require('node:url');
 const fs = require('node:fs');
 const helpers = require('./helpers.js');
 
@@ -141,7 +142,7 @@ describe('fetching already installed packages', () => {
     }, 40000);
 
     it('should return package path if git repo name differs from plugin id', () => {
-        const TARGET = `git+file://${path.resolve(__dirname, 'support/repo-name-neq-plugin-id.git')}`;
+        const TARGET = `git+${url.pathToFileURL(path.resolve(__dirname, 'support/repo-name-neq-plugin-id.git')).href}`;
         return Promise.resolve()
             .then(_ => fetchAndMatch(TARGET, { name: 'test-plugin' }))
             .then(_ => fetchAndMatch(TARGET, { name: 'test-plugin' }));
@@ -190,7 +191,7 @@ describe('fetching with node_modules in ancestor dirs', () => {
 
         // Copy test fixtures to avoid linking out of temp directory
         fs.cpSync(path.join(__dirname, 'support'), 'support', { recursive: true });
-        fetchTarget = `file://${path.resolve('support/dummy-local-plugin')}`;
+        fetchTarget = url.pathToFileURL(path.resolve('support/dummy-local-plugin')).href;
     });
 
     it('should still install to given destination', () => {
